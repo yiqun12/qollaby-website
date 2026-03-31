@@ -2,7 +2,41 @@ export const navigationLinks = [
   { href: "/", label: "Home" },
   { href: "/rules", label: "Rules" },
   { href: "/privacy", label: "Privacy" },
+  { href: "/support", label: "Support" },
   { href: "#download", label: "Download" },
+] as const;
+
+export const supportFaqs = [
+  {
+    question: "How do I create an account?",
+    answer:
+      "Download Qollaby from the App Store or Google Play, open the app, and tap Sign Up. You can register with your email, Google account, or Apple ID.",
+  },
+  {
+    question: "How do I reset my password?",
+    answer:
+      'On the login screen, tap "Forgot Password?" and enter the email address you used to register. You\'ll receive a link to create a new password.',
+  },
+  {
+    question: "How do I delete my account?",
+    answer:
+      "Go to your Profile, tap Edit Profile, then scroll down and tap \"Delete Account\". Follow the confirmation steps to permanently remove your account and data.",
+  },
+  {
+    question: "How do I report inappropriate content?",
+    answer:
+      "Tap the menu icon on any post, listing, or profile and select Report. Choose the reason and submit. Our team reviews all reports promptly.",
+  },
+  {
+    question: "How do I manage notifications?",
+    answer:
+      "You can control push notifications through your device Settings > Qollaby > Notifications. Within the app, notification preferences are tied to your device settings.",
+  },
+  {
+    question: "How do sponsor ads work?",
+    answer:
+      "Businesses and community partners can create sponsor ads that appear in the feed. Visit the Sponsors section in the app to learn about pricing and ad creation.",
+  },
 ] as const;
 
 export const homeFeatures = [
