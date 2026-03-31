@@ -125,22 +125,85 @@ export default function SupportPage() {
               </div>
             </div>
 
-            {/* Still need help? */}
-            <div className="mt-16 rounded-[2rem] border border-black/6 bg-white p-9 text-center shadow-sm">
-              <h2 className="text-2xl font-semibold text-[#1d1d1f]">
-                Still need help?
+            {/* Contact Form */}
+            <div className="mt-16 rounded-[2rem] border border-black/6 bg-white p-9 shadow-sm">
+              <h2 className="text-center text-2xl font-semibold text-[#1d1d1f]">
+                Contact us
               </h2>
-              <p className="mx-auto mt-4 max-w-lg text-base leading-8 text-[#5f6368]">
-                If you couldn&apos;t find the answer you were looking for, don&apos;t
-                hesitate to reach out. Our team is happy to assist.
+              <p className="mx-auto mt-4 max-w-lg text-center text-base leading-8 text-[#5f6368]">
+                Send us a message and we&apos;ll get back to you within 24 hours.
               </p>
-              <a
-                href="mailto:qollaby@gmail.com"
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#f5a623] px-8 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+              <form
+                action="https://usebasin.com/f/1c44a0b31f80"
+                method="POST"
+                className="mx-auto mt-8 max-w-lg space-y-5"
               >
-                <Mail className="h-4 w-4" />
-                Email us at qollaby@gmail.com
-              </a>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-[#1d1d1f]">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    className="mt-1.5 w-full rounded-xl border border-black/10 bg-[#fcfbf7] px-4 py-3 text-sm text-[#1d1d1f] outline-none transition-colors focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623]"
+                    placeholder="Your name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-[#1d1d1f]">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="mt-1.5 w-full rounded-xl border border-black/10 bg-[#fcfbf7] px-4 py-3 text-sm text-[#1d1d1f] outline-none transition-colors focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623]"
+                    placeholder="you@example.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-[#1d1d1f]">
+                    Subject
+                  </label>
+                  <select
+                    id="subject"
+                    name="subject"
+                    required
+                    className="mt-1.5 w-full rounded-xl border border-black/10 bg-[#fcfbf7] px-4 py-3 text-sm text-[#1d1d1f] outline-none transition-colors focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623]"
+                  >
+                    <option value="">Select a topic</option>
+                    <option value="General Question">General Question</option>
+                    <option value="Bug Report">Bug Report</option>
+                    <option value="Account & Privacy">Account &amp; Privacy</option>
+                    <option value="Account Deletion">Account Deletion</option>
+                    <option value="Feedback">Feedback</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-[#1d1d1f]">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={5}
+                    className="mt-1.5 w-full resize-none rounded-xl border border-black/10 bg-[#fcfbf7] px-4 py-3 text-sm text-[#1d1d1f] outline-none transition-colors focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623]"
+                    placeholder="Describe your issue or question..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#f5a623] px-8 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:cursor-pointer"
+                >
+                  <Mail className="h-4 w-4" />
+                  Send Message
+                </button>
+              </form>
             </div>
           </div>
         </section>
