@@ -147,7 +147,7 @@ export default function PricingPage() {
     ? typeof currentSub.planId === "object"
       ? (currentSub.planId as unknown as Plan)
       : plans.find((p) => p.$id === currentSub.planId)
-    : freePlan;
+    : webUser ? freePlan : null;
   const nextPlan = currentSub?.nextPlanId
     ? typeof currentSub.nextPlanId === "object"
       ? plans.find((p) => p.$id === (currentSub.nextPlanId as { $id: string }).$id)
@@ -298,8 +298,9 @@ export default function PricingPage() {
       const result = JSON.parse(response.responseBody);
       if (result.error) throw new Error(result.error);
 
-      const cancelDate = result.cancelAt
-        ? new Date(result.cancelAt).toLocaleDateString()
+      const rawDate = result.cancelAtDate || result.cancelAt;
+      const cancelDate = rawDate
+        ? new Date(rawDate).toLocaleDateString()
         : "end of billing period";
       setModal({
         type: "success",
@@ -322,7 +323,7 @@ export default function PricingPage() {
 
   const getButtonProps = (plan: Plan) => {
     const isFree = plan.priceMonthly === 0;
-    const isCurrentPlan = currentPlanId === plan.$id || (isFree && !currentSub);
+    const isCurrentPlan = currentPlanId === plan.$id || (isFree && !currentSub && !!webUser);
     const isUpgrade = currentSub && plan.priceMonthly > currentPrice;
     const isDowngrade = currentSub && plan.priceMonthly < currentPrice && plan.priceMonthly > 0;
     const isDowngradeToFree = currentSub && isFree;
@@ -469,7 +470,13 @@ export default function PricingPage() {
                 const accent = ACCENT[plan.slug] || "#f5a623";
                 const isFree = plan.priceMonthly === 0;
                 const isPopular = plan.slug === "essential";
-                const isCurrentPlan = currentPlanId === plan.$id || (isFree && !currentSub);
+                const isCurrentPlan = currentPlanId === plan.$id || (isFree && !currentSub && !!webUser);
+                const nextPlanId = currentSub?.nextPlanId
+                  ? typeof currentSub.nextPlanId === "object" ? currentSub.nextPlanId.$id : currentSub.nextPlanId
+                  : null;
+                const isUpcomingPlan = !!(nextPlanId && nextPlanId === plan.$id && currentSub?.cancelAtPeriodEnd);
+                const isUpcomingFree = isFree && currentSub?.cancelAtPeriodEnd && !nextPlanId;
+                const isUpcoming = isUpcomingPlan || isUpcomingFree;
                 const btn = getButtonProps(plan);
 
                 return (
@@ -478,9 +485,11 @@ export default function PricingPage() {
                     className={`relative flex flex-col rounded-2xl border bg-white p-6 shadow-sm transition-shadow hover:shadow-md ${
                       isCurrentPlan
                         ? "border-[#f5a623] ring-2 ring-[#f5a623]/30"
-                        : isPopular
-                          ? "border-[#059669] ring-2 ring-[#059669]/20"
-                          : "border-black/8"
+                        : isUpcoming
+                          ? "border-blue-500 ring-2 ring-blue-500/30"
+                          : isPopular
+                            ? "border-[#059669] ring-2 ring-[#059669]/20"
+                            : "border-black/8"
                     }`}
                   >
                     {isCurrentPlan && (
@@ -488,7 +497,12 @@ export default function PricingPage() {
                         Your Plan
                       </div>
                     )}
-                    {!isCurrentPlan && isPopular && (
+                    {!isCurrentPlan && isUpcoming && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white">
+                        Upcoming Plan
+                      </div>
+                    )}
+                    {!isCurrentPlan && !isUpcoming && isPopular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#059669] px-3 py-1 text-xs font-semibold text-white">
                         Most Popular
                       </div>
