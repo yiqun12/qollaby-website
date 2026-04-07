@@ -41,6 +41,22 @@ export async function getProfileByUserId(
   }
 }
 
+export async function getProfileByUsername(
+  username: string
+): Promise<Profile | null> {
+  try {
+    const res = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+      Collections.PROFILE,
+      [Query.equal("username", username.trim().toLowerCase()), Query.limit(1)]
+    );
+    return (res.documents[0] as unknown as Profile) || null;
+  } catch (error) {
+    console.error("Error fetching profile by username:", error);
+    return null;
+  }
+}
+
 export async function getCurrentWebUser(): Promise<WebUser | null> {
   const user = await getCurrentUser();
   if (!user) return null;
@@ -52,11 +68,20 @@ export async function getCurrentWebUser(): Promise<WebUser | null> {
 }
 
 export async function loginWithEmail(
-  email: string,
+  identifier: string,
   password: string
 ): Promise<WebUser> {
-  const formatted = email.trim().toLowerCase();
-  await account.createEmailPasswordSession(formatted, password);
+  let email = identifier.trim().toLowerCase();
+
+  if (!email.includes("@")) {
+    const profile = await getProfileByUsername(email);
+    if (!profile?.email) {
+      throw new Error("No account found with that username");
+    }
+    email = profile.email as string;
+  }
+
+  await account.createEmailPasswordSession(email, password);
 
   const user = await account.get();
   const profile = await getProfileByUserId(user.$id);

@@ -417,13 +417,34 @@ export default function PricingPage() {
 
                   {/* Next Billing / Cancellation */}
                   {currentSub.cancelAtPeriodEnd === true ? (
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-red-300">
-                        Cancels On ({nextPlan?.name || "Free Plan"})
-                      </span>
-                      <span className="font-semibold text-red-300">
+                    <div
+                      className="flex items-start justify-between gap-3 rounded-lg border border-red-600 bg-black/70 px-3 py-2.5 shadow-inner shadow-black/40"
+                      role="status"
+                    >
+                      <div className="flex min-w-0 flex-1 items-start gap-2">
+                        <AlertTriangle
+                          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500"
+                          aria-hidden
+                        />
+                        <div className="min-w-0 text-xs leading-snug">
+                          <p className="font-semibold text-white">
+                            Subscription scheduled to end
+                          </p>
+                          <p className="mt-0.5 text-[11px] text-red-200/95">
+                            After this date you&apos;ll be on{" "}
+                            <span className="font-medium text-red-100">
+                              {nextPlan?.name || "Free Plan"}
+                            </span>
+                            .
+                          </p>
+                        </div>
+                      </div>
+                      <time
+                        className="shrink-0 text-right text-xs font-semibold tabular-nums text-red-400"
+                        dateTime={currentSub.cancelAt || currentSub.currentPeriodEnd}
+                      >
                         {formatDate(currentSub.cancelAt || currentSub.currentPeriodEnd)}
-                      </span>
+                      </time>
                     </div>
                   ) : (
                     <div className="flex items-center justify-between text-xs">
@@ -513,7 +534,9 @@ export default function PricingPage() {
                       <h2 className="text-lg font-bold text-[#1d1d1f]">
                         {plan.name}
                         {isUpcoming && (
-                          <span className="ml-1.5 text-sm font-medium text-blue-500">(Up Coming Plan)</span>
+                          <span className="ml-1.5 text-sm font-medium text-blue-500">
+                            {"(Next month's plan)"}
+                          </span>
                         )}
                       </h2>
                     </div>

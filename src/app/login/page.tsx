@@ -93,19 +93,19 @@ function LoginContent() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="identifier"
                 className="mb-1.5 block text-sm font-medium text-[#1d1d1f]"
               >
-                Email
+                Email or Username
               </label>
               <input
-                id="email"
-                type="email"
+                id="identifier"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-[#f5a623]/40"
-                placeholder="you@example.com"
+                placeholder="you@example.com or username"
               />
             </div>
 
