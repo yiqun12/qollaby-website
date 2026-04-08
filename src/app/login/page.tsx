@@ -104,6 +104,8 @@ function LoginContent() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoCapitalize="off"
+                autoCorrect="off"
                 className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-[#f5a623]/40"
                 placeholder="you@example.com or username"
               />
