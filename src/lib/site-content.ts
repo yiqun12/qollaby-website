@@ -189,3 +189,11 @@ export const privacyPageSections = [
   { id: "changes", label: "Changes to this policy" },
   { id: "contact", label: "Contact us" },
 ] as const;
+
+export const deleteAccountPageSections = [
+  { id: "in-app", label: "Delete from the app" },
+  { id: "by-email", label: "Request by email" },
+  { id: "data-deleted", label: "Data we delete" },
+  { id: "data-retained", label: "Data we retain" },
+  { id: "contact", label: "Contact us" },
+] as const;

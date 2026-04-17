@@ -1,15 +1,66 @@
 import { stripe } from "@/lib/stripe";
+import { Client as ServerClient, Databases as ServerDatabases } from "node-appwrite";
 import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 
+const serverDatabases = (() => {
+  const endpoint = process.env.APPWRITE_ENDPOINT ?? process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
+  const projectId = process.env.APPWRITE_PROJECT_ID ?? process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
+  const apiKey = process.env.APPWRITE_API_KEY;
+  if (!endpoint || !projectId || !apiKey) return null;
+  const client = new ServerClient()
+    .setEndpoint(endpoint)
+    .setProject(projectId)
+    .setKey(apiKey);
+  return new ServerDatabases(client);
+})();
+
+const APPWRITE_DB =
+  process.env.APPWRITE_DATABASE_ID ?? process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+const PLANS_COLLECTION = "plans";
+
 export async function POST(req: NextRequest) {
   try {
-    const { priceId, userId, userEmail, planId, previousStripeSubscriptionId } =
+    const { userId, userEmail, planId, previousStripeSubscriptionId } =
       await req.json();
 
-    if (!priceId || !userId || !planId) {
+    if (!userId || !planId) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 },
+      );
+    }
+
+    if (!serverDatabases || !APPWRITE_DB) {
+      console.error(
+        "[Checkout] Missing Appwrite server credentials (APPWRITE_ENDPOINT / APPWRITE_PROJECT_ID / APPWRITE_API_KEY / APPWRITE_DATABASE_ID)",
+      );
+      return NextResponse.json(
+        { error: "Server not configured for checkout" },
+        { status: 500 },
+      );
+    }
+
+    let priceId: string;
+    try {
+      const plan = await serverDatabases.getDocument(
+        APPWRITE_DB,
+        PLANS_COLLECTION,
+        planId,
+      );
+      const resolved = (plan as { stripePriceIdMonthly?: string })
+        .stripePriceIdMonthly;
+      if (!resolved) {
+        return NextResponse.json(
+          { error: "Selected plan is not configured for Stripe checkout" },
+          { status: 400 },
+        );
+      }
+      priceId = resolved;
+    } catch (err) {
+      console.error("[Checkout] Failed to load plan for priceId resolution:", err);
+      return NextResponse.json(
+        { error: "Invalid plan" },
         { status: 400 },
       );
     }
