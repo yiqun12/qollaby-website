@@ -37,6 +37,7 @@ export function Footer() {
             <div className="mt-5 flex flex-col gap-3 text-sm text-[#5f6368]">
               <Link href="/" className="cursor-pointer hover:text-[#1d1d1f]">Home</Link>
               <Link href="/rules" className="cursor-pointer hover:text-[#1d1d1f]">Rules of Engagement</Link>
+              <Link href="/terms" className="cursor-pointer hover:text-[#1d1d1f]">Terms of Use</Link>
               <Link href="/privacy" className="cursor-pointer hover:text-[#1d1d1f]">Privacy Policy</Link>
             </div>
           </div>
